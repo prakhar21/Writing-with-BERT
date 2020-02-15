@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Writing with BERT</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <style type="text/css">
+    .textbuttons {
+      text-align: center;
+    } 
+    .form-control{
+      font-family: 'roboto';
+      font-size: 22px;
+    }
+    .info{
+     float: center;
+     text-align: center;
+    }
+    #out{
+     text-align: center; 
+      font-family: 'roboto';
+      font-size: 20px;
+    }
+    .slidecontainer {
+      width: 10%; /* Width of the outside container */
+    }
+
+    /* The slider itself */
+    .slider {
+      -webkit-appearance: none;  /* Override default CSS styles */
+      appearance: none;
+      width: 100%; /* Full-width */
+      height: 5px; /* Specified height */
+      background: #d3d3d3; /* Grey background */
+      outline: none; /* Remove outline */
+      opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+      -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+      transition: opacity .2s;
+    }
+
+    /* Mouse-over effects */
+    .slider:hover {
+      opacity: 1; /* Fully shown on mouse-over */
+    }
+
+    /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none; /* Override default look */
+      appearance: none;
+      width: 15px; /* Set a specific slider handle width */
+      height: 15px; /* Slider handle height */
+      background: #EC971F; /* Green background */
+      cursor: pointer; /* Cursor on hover */
+    }
+
+    .slider::-moz-range-thumb {
+      width: 18px; /* Set a specific slider handle width */
+      height: 12px; /* Slider handle height */
+      background: #EC971F; /* Green background */
+      cursor: pointer; /* Cursor on hover */
+    }
+    .span{
+        float: right;
+    }
+    
+  </style>
+</head>
+<body>
+<div class="container">
+  <h2 style='font-family: "roboto";'>Writing with  <b><font color="darkyellow">BERT</font></b></h2>
+  <p class='info'> <img src="bert.jpeg" height="117px" width="195px" alt="BERT"></p>
+  <form>
+    <div class="form-group">
+      <label for="comment">Seed text:</label>  
+      <textarea class="form-control" rows="4" id="comment"></textarea>
+      <span class='spantext'>
+        <div class="slidecontainer">
+          <br><input type="range" min="1" max="100" value="10" class="slider" id="myRange">
+          <p><span id="demo"></span></p>
+        </div>
+      </span>
+    </div>
+     <div class="dropdown span">
+      <button class="btn btn-primary dropdown-toggle btn-warning" type="button" id="decoding_type" data-toggle="dropdown">Select Algorithm
+      <span class="caret"></span></button>
+      <ul class="dropdown-menu">
+        <li><a href="#">Left to Right</a></li>
+        <li><a href="#">Random Hop</a></li>
+      </ul>
+     </div><br> 
+     <div class="textbuttons">
+      <button type="button" class="btn btn-primary" onclick="autowrite();">Auto Write</button>
+     </div>
+     
+  
+  </form><br><br>
+
+  <div class='info'>
+     <p id="output" style='font-family: "roboto";font-size: 18px;'></p> 
+  </div><br><br>
+
+  <div>
+    
+  </div>
+  
+</div>
+
+<script type="text/javascript">
+    var algoSelect;
+    var len;
+
+    $(".dropdown-menu li a").click(function() {
+      $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');
+      $(this).parents(".dropdown").find('.btn').val($(this).data('value'));
+      algoSelect = $(this).text();
+    })
+
+    function autowrite(){
+      var input_txt = document.getElementById('comment').value
+      //var len = document.getElementById('len').value
+      var decoding_type = algoSelect.toLowerCase();
+      var URL = 'http://0.0.0.0:5000/autocomplete'
+      var dataString = "text="+input_txt+"&len="+len+"&decoding_type="+decoding_type;
+      
+      $.ajax({
+          type: 'POST',
+          url: URL,
+          data: dataString,
+          success: function(resp) {
+            document.getElementById('output').innerHTML = resp;
+          }
+      });
+    }
+
+    var slider = document.getElementById("myRange");
+    var output = document.getElementById("demo");
+    output.innerHTML = slider.value; // Display the default slider value
+    len = slider.value;
+
+    // Update the current slider value (each time you drag the slider handle)
+    slider.oninput = function() {
+      output.innerHTML = this.value;
+      len = this.value;
+    } 
+  
+</script>
+  
+</body>
+</html>
