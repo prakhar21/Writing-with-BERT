@@ -15,8 +15,8 @@ Using BERT for doing the task of Conditional Natural Langauge Generation by fine
 4. Download review fine-tuned BERT model [here](https://drive.google.com/drive/folders/103dPMW9gXoQhRdPzx29qjK3PFXqk8EGH?usp=sharing)
 
 ### Tweaking the Parameters
-1. You can tweak in __length__ of the text you want to generate by using the __slider__ shown in the above image. The granularity of the slider is at __word__ level. Currently the limit is set to __maximum of 100 words__ at a time.
-2. You can choose between __Random Hop__ and __Left to Right__ decoding schemes. __Random Hop__ is ususlly seen to perform better than Left to Right. See the below fig. to understand them in detail.
+1. You can tweak in __length__ of the text you want to generate by using the __slider__ shown in the demo image. The granularity of the slider is at __word__ level. Currently the limit is set to __maximum of 100 words__ at a time.
+2. You can choose between __Random Hop__ and __Left to Right__ decoding schemes. __Random Hop__ is usually seen to perform better than Left to Right.
 
 ### Demo
 <p align="center">
