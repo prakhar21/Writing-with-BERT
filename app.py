@@ -9,8 +9,9 @@ import nltk
 app = Flask(__name__)
 CORS(app)
 
-tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
-model = BertForMaskedLM.from_pretrained('bert-base-uncased', output_attentions=False)
+base_dir = '/finetuned_lm-review/finetuned_lm'
+tokenizer = BertTokenizer.from_pretrained(base_dir)
+model = BertForMaskedLM.from_pretrained(base_dir, output_attentions=False)
 model.eval()
 
 def duplicates(lst, item):
@@ -22,14 +23,21 @@ def predict():
 	sentence_orig = request.form.get('text')
 	sentence_length = request.form.get('len')
 	decoding_type = request.form.get('decoding_type')
-
+	domain_type = request.form.get('domain_type')
 	filler = ' '.join(['MASK' for _ in range(int(sentence_length))])
+	
+	if domain_type=='review':
+		starter = '[REVIEW]'
+	else:
+		starter = ''
 
 	if len(sentence_orig.strip())==0:
-		sentence = "[CLS] " + filler + " . [SEP]"
+		sentence = "[CLS] "+ starter + " " + filler + " . [SEP]"
 	else:
-		sentence = "[CLS] " + sentence_orig + " " + filler + " . [SEP]"
+		sentence = "[CLS] " + starter + " " + sentence_orig + " " + filler + " . [SEP]"
 
+	print (sentence)
+	
 	tokenized_text = tokenizer.tokenize(sentence)
 	idxs = duplicates(tokenized_text, 'mask')
 	for masked_index in idxs:
@@ -41,7 +49,7 @@ def predict():
 	while generated<int(sentence_length):
 		mask_idxs = duplicates(tokenized_text, "[MASK]")
 		
-		if decoding_type=='Left to Right':
+		if decoding_type=='left to right':
 			focus_mask_idx = min(mask_idxs)
 		else:
 			focus_mask_idx = random.choice(mask_idxs)
@@ -66,7 +74,7 @@ def predict():
 		tokenized_text[focus_mask_idx] = predicted_token
 		generated += 1
 	
-	return ' '.join(tokenized_text[1:-1])
+	return ' '.join(tokenized_text[1:-1]).replace('[ review ]','')
 
 if __name__=='__main__':
 	app.run(debug=False)
