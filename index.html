@@ -70,7 +70,7 @@
 </head>
 <body>
 <div class="container">
-  <h2 style='font-family: "roboto";'>Writing with  <b><font color="darkyellow">BERT</font></b></h2>
+  <h1 style='font-family: "Open Sans", sans-serif;font-weight: 400; letter-spacing: 0; line-height: 2rem;'>Writing with  <b><font color="darkyellow">BERT</font></b></h1>
   <p class='info'> <img src="bert.jpeg" height="117px" width="195px" alt="BERT"></p>
   <form>
     <div class="form-group">
@@ -82,17 +82,26 @@
           <p><span id="demo"></span></p>
         </div>
       </span>
-    </div>
-     <div class="dropdown span">
-      <button class="btn btn-primary dropdown-toggle btn-warning" type="button" id="decoding_type" data-toggle="dropdown">Select Algorithm
-      <span class="caret"></span></button>
-      <ul class="dropdown-menu">
-        <li><a href="#">Left to Right</a></li>
-        <li><a href="#">Random Hop</a></li>
-      </ul>
-     </div><br> 
+        <div class="textbuttons">
+            <label class="radio-inline"><input type="radio" name="domain" value="open" checked>Open World</label>
+            <!-- <label><input type="radio" name="domian" value="open">Open World</label>  -->
+            <label class="radio-inline"><input type="radio" name="domain" value="review">Hotel Review</label>
+            <!-- <label><input type="radio" name="domain" value="review">Hotel Review</label> -->
+        </div>
+         <div class="dropdown span">
+          <button class="btn btn-primary dropdown-toggle btn-warning" type="button" id="decoding_type" data-toggle="dropdown">Select Algorithm
+          <span class="caret"></span></button>
+          <ul class="dropdown-menu">
+            <li><a href="#">Left to Right</a></li>
+            <li><a href="#">Random Hop</a></li>
+          </ul>
+         </div>
+      </div>
+
+    </div> 
+    <br> 
      <div class="textbuttons">
-      <button type="button" class="btn btn-primary" onclick="autowrite();">Auto Write</button>
+      <button type="button" class="btn btn-danger" onclick="autowrite();">Auto Write</button>
      </div>
      
   
@@ -110,7 +119,9 @@
 
 <script type="text/javascript">
     var algoSelect;
+    var domainSelect;
     var len;
+    
 
     $(".dropdown-menu li a").click(function() {
       $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');
@@ -118,12 +129,17 @@
       algoSelect = $(this).text();
     })
 
+    // domainSelect = $("input:checked").val()
+
     function autowrite(){
       var input_txt = document.getElementById('comment').value
       //var len = document.getElementById('len').value
       var decoding_type = algoSelect.toLowerCase();
+      // var domain_type = 'review'//domainSelect.toLowerCase();
+      var domain_type = $("input[name='domain']:checked").val().toLowerCase();
+
       var URL = 'http://0.0.0.0:5000/autocomplete'
-      var dataString = "text="+input_txt+"&len="+len+"&decoding_type="+decoding_type;
+      var dataString = "text="+input_txt+"&len="+len+"&decoding_type="+decoding_type+"&domain_type="+domain_type;
       
       $.ajax({
           type: 'POST',
