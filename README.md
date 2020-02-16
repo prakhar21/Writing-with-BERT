@@ -1,4 +1,4 @@
-### Writing with BERT
+# Writing with BERT
 Using BERT for doing the task of Conditional Natural Langauge Generation by fine-tuning pre-trained BERT on custom dataset. 
 
 ### Running the Server
