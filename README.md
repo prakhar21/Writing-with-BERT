@@ -26,6 +26,6 @@ Using BERT for doing the task of Conditional Natural Langauge Generation by fine
 ### Generation Schemes
 #### 1. Left to Right Scheme
 <p align="center">
-  <img width="450" height="100" src="https://github.com/prakhar21/Writing-with-BERT/blob/master/left_to_right_bert_decoding.gif">
+  <img width="450" height="100" src="https://github.com/prakhar21/Writing-with-BERT/blob/master/bert_left_to_right_generation.gif">
 </p>
 
